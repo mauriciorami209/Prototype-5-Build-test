@@ -30,7 +30,22 @@ public class Target : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.touchCount > 0 && gameManager.isActiveGame)
+        {
+            Touch touch = Input.GetTouch(0);
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.transform == this.transform)
+                {
+                    Destroy(gameObject);
+                    Instantiate(explosionObject, transform.position, explosionObject.transform.rotation);
+                    gameManager.UpdateScore(pointValue);
+                }
+            }
+        }
+
     }
 
     Vector3 RandomForce()
@@ -48,7 +63,7 @@ public class Target : MonoBehaviour
         return new Vector3(Random.Range(-xRange, xRange), ySpawnPos);
     }
 
-    private void OnMouseDown()
+    /*private void OnMouseDown()
     {
         if (gameManager.isActiveGame)
         {
@@ -56,8 +71,9 @@ public class Target : MonoBehaviour
             Instantiate(explosionObject, transform.position, explosionObject.transform.rotation);
             gameManager.UpdateScore(pointValue);
         }
+
         
-    }
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {
